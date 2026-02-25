@@ -6,7 +6,7 @@ import re
 import itertools
 import tempfile
 from copy import deepcopy
-from distutils import spawn
+import shutil
 from collections import namedtuple, OrderedDict
 from . import command, plugin, utils
 
@@ -162,7 +162,7 @@ def ua(logdir=None, **kwargs):
     Returns a command string instance with sensible default arguments.
     """
     defaults = {
-        "bin_path": spawn.find_executable("sipp"),
+        "bin_path": shutil.which("sipp"),
     }
     # drop any built-in scen if a script file is provided
     if "scen_file" in kwargs:
