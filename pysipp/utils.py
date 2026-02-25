@@ -1,5 +1,5 @@
 import logging
-import imp  # XXX py2.7
+import importlib.util
 import tempfile
 import os
 import inspect
@@ -32,7 +32,12 @@ def load_mod(path, name=None):
     """Load a source file as a module"""
     name = name or os.path.splitext(os.path.basename(path))[0]
     # load module sources
-    return imp.load_source(name, path)
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec and spec.loader:
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    return None
 
 
 def iter_data_descrs(cls):
